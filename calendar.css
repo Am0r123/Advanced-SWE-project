@@ -1,0 +1,68 @@
+body {
+  font-family: Arial, sans-serif;
+
+  background: url('p5.jpg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+
+.calendar {
+  width: 90%;
+  max-width: 550px; /* Made it smaller */
+  margin: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 10px;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.calendar-body {
+  padding: 5px;
+}
+
+.calendar-weekdays, .calendar-dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.calendar-weekdays div, .calendar-dates div {
+  text-align: center;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.calendar-dates div {
+  border: 1px solid #ddd;
+  cursor: pointer;
+  min-height: 80px; /* Reduced height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.calendar-dates div:hover {
+  background-color: #f0f0f0;
+}
+
+.note-input {
+  width: 90%;
+  margin-top: 3px;
+  padding: 3px;
+  font-size: 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 50px; /* Reduced input size */
+}
