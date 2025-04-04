@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Issue</title>
+    <link rel="stylesheet" th:href="@{/style2.css}">
+</head>
+<body>
+    <div class="Issuebox">
+        <h2>Create Issue</h2>
+        <form>
+            <label for="issue-type">Issue type</label>
+            <select id="issue-type">
+                <option>Task</option>
+                <option>Event</option>
+            </select>
+            <hr>
+            <label for="status">Status</label>
+            <select id="status">
+                <option>To Do</option>
+                <option>In Progress</option>
+                <option>Done</option>
+            </select>
+
+            <label for="summary">Summary</label>
+            <input type="text" id="summary" required>
+            <p class="error">Summary is required</p>
+
+            <label for="description">Description</label>
+            <textarea id="description" placeholder="Enter Your Description"></textarea>
+
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start-date" required>
+
+            <label for="end-date">End Date</label>
+            <input type="date" id="end-date" required>
+
+            <button type="submit">Add Issue</button>
+        </form>
+    </div>
+</body>
+</html>

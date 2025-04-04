@@ -1,0 +1,124 @@
+.Login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-image: url('photos/calendar-planner-agenda-schedule-concept.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+body.loaded {
+    opacity: 0.9;
+}
+.Login-div {
+    background: rgba(255, 255, 255, 0.847);
+    padding: 50px 30px;
+    border-radius: 15px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    backdrop-filter: blur(6px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: scaleIn 1s ease-out;
+
+}
+.Login-h2{
+    color: black;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.input-group{
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #dfe1e6;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #fafbfc;
+    transition: 0.3s;
+    display: block;
+    box-sizing: border-box;
+}
+.input-group input:focus {
+    outline: none;
+    border-color: #0052cc;
+    background: #ffffff;
+    box-shadow: 0 0 4px rgba(0, 82, 204, 0.3);
+}
+
+.input-group input::placeholder {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+
+.Login-submit {
+  width: 100%;
+    padding: 14px;
+    background: #183153;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease-in-out;
+}
+
+.Login-submit:hover {
+    background: #0e1f35;
+}
+
+.Login-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.icon-container {
+    width: 70px;
+    height: 70px;
+    background: #183153;
+    border-radius: 50%;
+    position: absolute;
+    top: -36px;
+    left: 41%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon-container i {
+    color: white;
+    font-size: 30px;
+}
+.register-text {
+    margin-top: 30px;
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+}
+
+.register-link {
+    color: #525ed1;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    color: #07158a;
+    transition: color 0.3s ease-in-out;
+}

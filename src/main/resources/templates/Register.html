@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" th:href="@{/style1.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script th:src="@{/myyscript.js}"></script>
+
+</head>
+<script>
+    window.addEventListener('load', function () {
+        document.body.classList.add('loaded');
+    });
+</script>
+<body class="Login-body">
+    <div class="Login-div">
+        <div class="icon-container">
+            <i class="fas fa-user"></i> 
+        </div>
+        <h2 class="Login-h2">Registration</h2>
+        <form th:action="@{/User/Register}" th:object="${user}" method="POST" class="Login-form" onsubmit="return checkPasswordsMatch()">
+            <div class="input-group">
+                <input type="text" th:field="*{name}" placeholder="Enter Name" required>
+            </div>
+            <div class="input-group">
+                <input type="text" th:field="*{username}" placeholder="Enter Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" th:field="*{password}" placeholder="Enter Password" required id="password">
+            </div>
+            <div class="input-group">
+                <input type="password" placeholder="Confirm Password" required id="confirmPassword">            
+            </div>
+            <input type="submit" class="Login-submit">
+            <p class="register-text">
+                Already have an account? <a th:href="@{/User/Login}" class="register-link">Login</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>
