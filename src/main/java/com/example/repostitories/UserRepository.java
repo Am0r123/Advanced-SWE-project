@@ -1,6 +1,6 @@
-package com.example.Quiz.demo.repostitories;
+package com.example.repostitories;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.Quiz.demo.models.User;
+import com.example.models.User;
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
