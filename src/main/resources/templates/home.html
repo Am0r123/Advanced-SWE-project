@@ -4,19 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Calendar</title>
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+          font-family: 'Segoe UI', sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+    
+        nav {
+          padding: 1rem 2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+    
+        nav ul {
+          list-style-type: none;
+          display: flex;
+          gap: 2rem;
+          margin: 0;
+          padding: 0;
+        }
+    
+        nav ul li a {
+          color: white;
+          text-decoration: none;
+          font-weight: 500;
+        }
+    
+        .notification-icon {
+          position: relative;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+    
+        .notification-badge {
+          position: absolute;
+          top: -8px;
+          right: -10px;
+          background: red;
+          color: white;
+          font-size: 12px;
+          padding: 2px 6px;
+          border-radius: 50%;
+          font-weight: bold;
+        }
+        .notification-icon .notif-link {
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+        }
+        .addmargin{
+            margin-left: 10px;
+        }
+      </style>
 </head>
 <body>
     <header>
         <div class="logo">Smart Calendar</div>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+              <li><a href="">Home</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
             </ul>
-        </nav>
+            <div class="notification-icon addmargin" id="notifBell">
+                <a href="/notification" class="notif-link">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <span class="notification-badge" id="notifCount">0</span>
+            </div>              
+          </nav>
     </header>
     
     <section class="startproject">
@@ -49,5 +111,21 @@
     <footer>
         <p>&copy; 2025 Smart Calendar. All rights reserved.</p>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const notifCount = document.getElementById("notifCount");
+    
+          const notifications = JSON.parse(localStorage.getItem("notifications")) || [
+            { message: "Reminder: Meeting at 3 PM", time: "10 min ago", new: false }
+          ];
+    
+          localStorage.setItem("notifications", JSON.stringify(notifications));
+    
+          const unreadCount = notifications.filter(n => n.new).length;
+
+          notifCount.textContent = unreadCount;
+          notifCount.style.display = unreadCount > 0 ? "inline-block" : "none";
+        });
+    </script>
 </body>
 </html>

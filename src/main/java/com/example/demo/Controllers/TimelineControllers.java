@@ -17,31 +17,41 @@ public class TimelineControllers {
 
     @GetMapping("")
     public ModelAndView home() {
-        return new ModelAndView("timeline.html");
+        return new ModelAndView("home.html");
     }
     @GetMapping("/notification")
     public ModelAndView not() {
         return new ModelAndView("notification.html");
     }
 
-    @GetMapping("/timeline/list")
-    public ModelAndView timelines() {
-        ModelAndView mav = new ModelAndView("listtimeline.html");
-        List<timeline> timelines = timelinerepository.findAll();
-        mav.addObject("timelines", timelines);
-        return mav;
+    @GetMapping("/timeline")
+    public ModelAndView timeline() {
+        return new ModelAndView("timeline.html");
     }
 
-    @GetMapping("/timeline/add")
-    public ModelAndView addcate() {
-        ModelAndView mav = new ModelAndView("addtimeline.html");
-        mav.addObject("timelines", timelinerepository.findAll());
-        return mav;
+    @GetMapping("/calendar")
+    public ModelAndView calendar() {
+        return new ModelAndView("calendar.html");
     }
 
-    @PostMapping("/timeline/save")
-    public String savetimeline(@ModelAttribute timeline timeline) {
-        timelinerepository.save(timeline);
-        return "redirect:/timeline/list";
-    }
+    // @GetMapping("/timeline/list")
+    // public ModelAndView timelines() {
+    //     ModelAndView mav = new ModelAndView("listtimeline.html");
+    //     List<timeline> timelines = timelinerepository.findAll();
+    //     mav.addObject("timelines", timelines);
+    //     return mav;
+    // }
+
+    // @GetMapping("/timeline/add")
+    // public ModelAndView addcate() {
+    //     ModelAndView mav = new ModelAndView("addtimeline.html");
+    //     mav.addObject("timelines", timelinerepository.findAll());
+    //     return mav;
+    // }
+
+    // @PostMapping("/timeline/save")
+    // public String savetimeline(@ModelAttribute timeline timeline) {
+    //     timelinerepository.save(timeline);
+    //     return "redirect:/timeline/list";
+    // }
 }

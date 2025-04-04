@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.models.User;
+
+import com.example.demo.models.User;
+import com.example.demo.repostitories.UserRepository;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PathVariable;
-
-
-import com.example.repostitories.UserRepository;
 
 
 @RestController
