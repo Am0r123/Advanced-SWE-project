@@ -1,0 +1,124 @@
+body{
+    background-image: url("confident-call-center-operator-talking-with-client.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    opacity: 0.9;
+}
+.contact {
+    background-color: #fff; 
+    padding: 20px;
+    width: 70%;
+    margin: 50px auto;
+    color: black;
+    box-shadow: 0 0 10px black;
+    border-radius: 30px;
+}
+.contact-div{
+    width:80% ;
+    margin: 50px auto;
+}
+.box-contact{
+display: flex;
+background-color: #fff; 
+border-radius: 10px;
+box-shadow: 0 0 10px black;
+}
+.left-box-contact{
+   flex-basis: 60%;
+   padding: 20px;
+}
+.right-box-contact{
+   flex-basis: 40%;
+   padding: 20px;
+   background: #1c00b5;
+   color: #fff;
+}
+#h1-contact{
+   color: #6c63ff;
+   margin-bottom: 10px;
+}
+#h3-contact{
+   color: #6c63ff;
+   margin-bottom: 30px;
+}
+#h3-contact-right{
+color: #CCCCCC;
+margin-bottom: 30px;
+}
+.contact p {
+font-size: 18px;
+color: black; 
+margin-bottom: 20px;
+}
+.contact-div p{
+   margin-bottom: 40px;
+}
+.row-contact{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px; 
+}
+
+#input-contact{
+width: 100%;
+padding: 10px;
+margin-bottom: 10px;
+border: none;
+border-bottom: 2px solid rgb(23, 60, 98);
+}
+#input-contact-2{
+width: 90%;
+padding: 10px;
+margin-bottom: 10px;
+margin-right: 30px;
+border: none;
+border-bottom: 2px solid rgb(23, 60, 98);
+
+}
+#input-contact-3{
+width: 100%;
+padding: 10px;
+margin-bottom: 10px;
+border: none;
+border-bottom: 2px solid rgb(23, 60, 98);
+
+}
+#input-contact::placeholder{
+color: gray;
+}
+#textarea-contact{
+   width: 100%;
+   border: 1px solid black ;
+   padding: 10px;
+   box-sizing: border-box;
+   margin-bottom: 20px;
+}
+#textarea-contact::placeholder{
+color: gray;
+}
+#label-contact{
+color: black;
+margin-bottom: 6px;
+display: block;
+}
+#label-contact-right{
+color: #CCCCCC;
+margin-bottom: 6px;
+display: block;
+}
+#button-contact{
+width: 120px; 
+height: 40px; 
+border-radius: 20px;
+margin-top: 20px;
+background: #6c63ff; 
+color: #fff; 
+border: none;
+}
+#button-contact:hover {
+background-color: #4c46ba;    
+}
