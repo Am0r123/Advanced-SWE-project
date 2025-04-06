@@ -7,85 +7,68 @@
     <link rel="stylesheet" href="css/home.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-          font-family: 'Segoe UI', sans-serif;
-          margin: 0;
-          padding: 0;
+    .custom-alert {
+        position: relative;
+        padding: 15px 20px 15px 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        animation: slideIn 0.5s ease-out;
+        color: white;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    .alert-success {
+        background-color: #4CAF50;
+    }
+
+    .alert-danger {
+        background-color: #f44336;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: white;
+        cursor: pointer;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
         }
-    
-        nav {
-          padding: 1rem 2rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        to {
+            transform: translateX(0);
+            opacity: 1;
         }
-    
-        nav ul {
-          list-style-type: none;
-          display: flex;
-          gap: 2rem;
-          margin: 0;
-          padding: 0;
-        }
-    
-        nav ul li a {
-          color: white;
-          text-decoration: none;
-          font-weight: 500;
-        }
-    
-        .notification-icon {
-          position: relative;
-          color: white;
-          font-size: 1.5rem;
-          cursor: pointer;
-        }
-    
-        .notification-badge {
-          position: absolute;
-          top: -8px;
-          right: -10px;
-          background: red;
-          color: white;
-          font-size: 12px;
-          padding: 2px 6px;
-          border-radius: 50%;
-          font-weight: bold;
-        }
-        .notification-icon .notif-link {
-            font-size: 24px;
-            color: white;
-            text-decoration: none;
-        }
-        .addmargin{
-            margin-left: 10px;
-        }
-      </style>
+    }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Smart Calendar</div>
-        <nav>
-            <ul>
-              <li><a href="">Home</a></li>
-              <li><a href="#features">Features</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="notification-icon addmargin" id="notifBell">
-                <a href="/notification" class="notif-link">
-                    <i class="fas fa-bell"></i>
-                </a>
-                <span class="notification-badge" id="notifCount">0</span>
-            </div>              
-          </nav>
-    </header>
+    <div id="message-container" style="position: fixed; top: 20px; right: 20px; width: 300px; z-index: 1000;">
+        <div th:if="${success}" id="success-message" class="alert alert-success custom-alert">
+            <span th:text="${success}"></span>
+            <button class="close-btn" onclick="closeMessage('success-message')">&times;</button>
+        </div>
+        
+        <div th:if="${error}" id="error-message" class="alert alert-danger custom-alert">
+            <span th:text="${error}"></span>
+            <button class="close-btn" onclick="closeMessage('error-message')">&times;</button>
+        </div>
+    </div>
     
     <section class="startproject">
         <div class="startproject-content">
             <h1>Plan Your Time Efficiently</h1>
             <p>Never miss an event with our smart scheduling assistant.</p>
-            <a class="btn">Get Started</a>
+            <a href="/User/Register" class="btn">Get Started</a>
         </div>
     </section>
     
@@ -126,6 +109,48 @@
           notifCount.textContent = unreadCount;
           notifCount.style.display = unreadCount > 0 ? "inline-block" : "none";
         });
+        window.addEventListener('DOMContentLoaded', (event) => {
+        var urlParams = new URLSearchParams(window.location.search);
+        
+        if (urlParams.has('success')) {
+            showNotification(urlParams.get('success'), false);
+            removeUrlParam('success');
+        } else if (urlParams.has('error')) {
+            showNotification(urlParams.get('error'), true);
+            removeUrlParam('error');
+        }
+        
+        setTimeout(() => {
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            
+            if (successMessage) {
+                successMessage.style.transition = "opacity 1s";
+                successMessage.style.opacity = 0;
+                setTimeout(() => { successMessage.remove(); }, 1000);
+            }
+            
+            if (errorMessage) {
+                errorMessage.style.transition = "opacity 1s";
+                errorMessage.style.opacity = 0;
+                setTimeout(() => { errorMessage.remove(); }, 1000);
+            }
+        }, 5000);
+        });
+
+        function removeUrlParam(param) {
+            var urlParams = new URLSearchParams(window.location.search);
+            urlParams.delete(param);
+            window.history.replaceState(null, null, window.location.pathname + '?' + urlParams.toString());
+        }
+
+        function showNotification(message, isError) {
+            const notification = document.createElement('div');
+            notification.classList.add(isError ? 'alert-danger' : 'alert-success');
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+        }
     </script>
 </body>
 </html>
