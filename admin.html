@@ -1,0 +1,138 @@
+
+    
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- <script src="<?php echo BASE_URL; ?>/assets/js/admin.js" defer></script> -->
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div id="notification" class="notification"></div>
+    <!-- <div id="popupMessage" class="hidden"></div> -->
+    
+    <div class="admin-container">
+      <!-- Sidebar Navigation -->
+      <nav class="side-nav">
+        <div class="logo">Admin</div>
+        <ul>
+          <li><a href="#" onclick="showSection('user')">Manage Users</a></li>
+          <li><a href="#" onclick="showSection('admin')">Manage Admins</a></li>
+        </ul>
+      </nav>
+    
+      <!-- Main Content -->
+      <main class="content">
+        <!-- Insights Section -->
+        <section class="insights">
+          <h1>Dashboard Insights</h1>
+          <div class="insights-grid">
+            <div class="card">
+              <h2>Total Users</h2>
+              <p th:text="${totalUsers}"></p>
+            </div>
+            <div class="card">
+              <h2>Active Memberships</h2>
+              <p th:text="${activeMemberships}"></p>
+            </div>
+            <div class="card">
+              <h2>Monthly Revenue</h2>
+              <p th:text="${monthlyRevenue}"></p>
+            </div>
+            <div class="card">
+              <h2>Products Sold</h2>
+              <p th:text="${productsSold}"></p>
+            </div>
+          </div>
+        </section>
+    
+        <!-- Manage Users Section -->
+        <section id="user" class="dynamic-section hidden">
+          <h2 id="userlisttitle">User List</h2>
+            <button  class="back-btn hidden addusertitle" onclick="goback('add_user','userTable')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="hidden addusertitle">Add User</h2>
+          <button class="reveal_btn" onclick="reveal('add_user','userTable')">Add User</button>
+          <form id="add_user" class="hidden" th:action="@{/admin/add-user}" method="post">
+            <input type="text" name="name" placeholder="User Name" />
+            <input type="text" name="username" placeholder="User Name" />
+            <input type="password" name="password" placeholder="Password" />
+            <button type="submit" class="btn-primary">Add User</button>
+          </form>
+    
+          <table id="userTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td>
+                        <!-- Correct Edit Button -->
+                        <a th:href="@{/admin/edit-user/{id}(id=${user.id})}" class="btn-edit">Edit</a>
+                
+                        <!-- Delete Button -->
+                        <form th:action="@{/admin/delete-user}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${user.id}" />
+                            <button type="submit" class="btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>                               
+            </tbody>
+          </table>
+        </section>
+    
+        <!-- Manage Admins Section -->
+        <section id="admin" class="dynamic-section hidden">
+          <h2 id="adminlisttitle">Admin List</h2>
+          <button  class="back-btn hidden addadmintitle" onclick="goback('add_admin','adminTable')">
+              <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="hidden addadmintitle">Add Admin</h2>
+          <button class="reveal_btn" onclick="reveal('add_admin','adminTable')">Add Admin</button>
+          <form id="add_admin" class="hidden" th:action="@{/admin/add-admin}" method="post">
+            <input type="text" name="name" placeholder="Admin Name" />
+            <input type="text" name="username" placeholder="Admin UserName" />
+            <input type="password" name="password" placeholder="Password" />
+            <button type="submit" class="btn-primary">Add Admin</button>
+          </form>
+    
+          <table id="adminTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>UserName</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="admin : ${admins}">
+                <td th:text="${admin.name}"></td>
+                <td th:text="${admin.username}"></td>
+                <td>
+                <a th:href="@{/admin/edit-admin/{id}(id=${admin.id})}" class="btn-edit">Edit</a>
+                  <form th:action="@{/admin/delete-admin}" method="post">
+                    <input type="hidden" name="id" th:value="${admin.id}" />
+                    <button type="submit" class="btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>    
+<script src="/js/admin.js"></script>
+</body>
+</html>
