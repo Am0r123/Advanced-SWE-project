@@ -1,16 +1,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registration</title>
-    <link rel="stylesheet"  href="css/style1.css">
+    <link rel="stylesheet"  href="/css/style1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script th:src="@{/myyscript.js}"></script>
-
+    <link rel="stylesheet" href="/css/reg.css"> 
 </head>
 <script>
     window.addEventListener('load', function () {
         document.body.classList.add('loaded');
     });
 </script>
+<div id="message-container" style="position: fixed; top: 20px; right: 20px; width: 300px; z-index: 1000;">
+    <div th:if="${success}" id="success-message" class="alert alert-success custom-alert">
+        <span th:text="${success}"></span>
+        <button class="close-btn" onclick="closeMessage('success-message')">&times;</button>
+    </div>
+    
+    <div th:if="${error}" id="error-message" class="alert alert-danger custom-alert">
+        <span th:text="${error}"></span>
+        <button class="close-btn" onclick="closeMessage('error-message')">&times;</button>
+    </div>
+</div>
 <body class="Login-body">
     <div class="Login-div">
         <div class="icon-container">
@@ -37,4 +48,5 @@
         </form>
     </div>
 </body>
+<script src="/js/reg.js"></script>
 </html>
