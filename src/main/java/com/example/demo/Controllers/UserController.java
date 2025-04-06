@@ -10,11 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.models.User;
+import com.example.demo.models.Admin;
 import com.example.demo.repostitories.UserRepository;
+import com.example.demo.repostitories.adminrepository;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/User")
@@ -22,53 +24,81 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private adminrepository adminrepository;
 
     @GetMapping("")
     public ModelAndView viewTaskPage() {
         return new ModelAndView("Issue.html");
     }
-
     @GetMapping("Register")
-   public ModelAndView addUser() {
-    ModelAndView mav = new ModelAndView("Register.html");
-    User newUser = new User();
-    mav.addObject("user", newUser);
-    return mav;
-}
-
-   @PostMapping("Register")
-   public String saveUser(@ModelAttribute User user) {
-
-    User existingUser = this.userRepository.findByUsername(user.getUsername());
-    if (existingUser != null) {
-        return "<script>alert('Username Already Exists'); window.location.href='/User/Register';</script>";    
-    }
-
-    String encodedPassword = BCrypt.hashpw(user.getPassword(),BCrypt.gensalt(12));
-    user.setPassword(encodedPassword);
-    this.userRepository.save(user);
-    return "<script>alert('Sucessfully'); window.location.href='/User/Login';</script>";    
+   public ModelAndView addUser(@RequestParam(value = "success", required = false) String success,
+   @RequestParam(value = "error", required = false) String error) {
+        ModelAndView mav = new ModelAndView("Register.html");
+        if (success != null) {
+            mav.addObject("success", success);
+        }
     
-}
-
-@GetMapping("Login")
-public ModelAndView Login() {
-    ModelAndView mav = new ModelAndView("Login");
-    User newUser = new User();
-    mav.addObject("user", newUser);
-    return mav;
-}
-
-@PostMapping("Login")
-public String LoginProcess(@RequestParam("username") String username, @RequestParam("password") String password) {
-    User dbUser = this.userRepository.findByUsername(username);
-    if (dbUser == null) {
-        return "<script>alert('Invaild Username or Password'); window.location.href='/User/Login';</script>";
+        if (error != null) {
+            mav.addObject("error", error);
+        }
+        User newUser = new User();
+        mav.addObject("user", newUser);
+        return mav;
     }
-    Boolean isPasswordMatched = BCrypt.checkpw(password, dbUser.getPassword());
-    if (isPasswordMatched)
-        return "Welcome " + dbUser.getName();
-    else
-    return "<script>alert('Invaild Username or Password'); window.location.href='/User/Login';</script>";
-}
+
+    @PostMapping("Register")
+    public String saveUser(@ModelAttribute User user) {
+
+        User existingUser = this.userRepository.findByUsername(user.getUsername());
+        if (existingUser != null) {
+            return "<script>window.location.href='/User/Register?error=Username Already Exists';</script>";    
+        }
+
+        String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+        user.setPassword(encodedPassword);
+        this.userRepository.save(user);
+        
+        return "<script>window.location.href='/home?success=Successfully Registered';</script>";
+    }
+
+    @GetMapping("Login")
+    public ModelAndView Login(@RequestParam(value = "success", required = false) String success,
+    @RequestParam(value = "error", required = false) String error) {
+        ModelAndView mav = new ModelAndView("Login");
+        if (success != null) {
+            mav.addObject("success", success);
+        }
+    
+        if (error != null) {
+            mav.addObject("error", error);
+        }
+        User newUser = new User();
+        mav.addObject("user", newUser);
+        return mav;
+    }
+
+    @PostMapping("Login")
+    public String LoginProcess(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
+        User dbUser = this.userRepository.findByUsername(username);
+        
+        if (dbUser != null) {
+            Boolean isPasswordMatched = BCrypt.checkpw(password, dbUser.getPassword());
+            if (isPasswordMatched) {
+                session.setAttribute("isLoggedIn", true);
+                return "<script>window.location.href='/home?success=Welcome " + dbUser.getName() + "';</script>";
+            }
+        }
+    
+        Admin dbAdmin = this.adminrepository.findByUsername(username);
+        
+        if (dbAdmin != null) {
+            Boolean isPasswordMatched = BCrypt.checkpw(password, dbAdmin.getPassword());
+            if (isPasswordMatched) {
+                return "<script>window.location.href='/admin/dashboard?success=Welcome Admin " + dbAdmin.getName() + "';</script>";
+            }
+        }
+    
+        return "<script>window.location.href='/User/Login?error=Invalid Username or Password';</script>";
+    }    
 }
