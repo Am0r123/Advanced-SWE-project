@@ -6,7 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-image: url('photos/3793120.jpg'); 
+    background-image: url('/images/3793120.jpg'); 
     background-size: cover; 
     background-position: 10% 15%; 
     background-repeat: no-repeat;
