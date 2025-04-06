@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Calendar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Header styles */
+        #header {
+            background: #007BFF !important; /* Set background color */
+            color: white !important; /* Text color */
+            padding: 15px 20px !important; /* Padding */
+            display: flex !important; /* Flex layout */
+            justify-content: space-between !important; /* Spacing between items */
+            align-items: center !important; /* Center items vertically */
+            font-family: 'Segoe UI', sans-serif !important; /* Font style */
+        }
+
+        #header .logo {
+            font-size: 1.5em !important; /* Larger logo */
+            font-weight: bold !important; /* Bold text */
+        }
+
+        #header nav ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: flex !important;
+        }
+
+        #header nav ul li {
+            display: inline-block !important;
+            margin: 0 15px !important;
+        }
+
+        #header nav ul li a {
+            color: white !important;
+            text-decoration: none !important;
+            font-weight: 500 !important;
+            font-size: 1.1em !important;
+        }
+
+        /* Notification icon styles */
+        #header .notification-icon {
+            display: flex !important; /* Using flex to align icon and badge */
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.5rem !important;
+            cursor: pointer !important;
+            margin-left: 10px !important; /* Reduces space between icon and menu items */
+        }
+
+        #header .notification-badge {
+            background: red !important;
+            color: white !important;
+            font-size: 12px !important;
+            padding: 3px 6px !important;
+            border-radius: 50% !important;
+            font-weight: bold !important;
+            margin-left: -2px !important;
+            margin-top:-2px !important;
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;">
+
+    <!-- Header Section -->
+    <header id="header">
+        <div class="logo">Smart Calendar</div>
+        <nav>
+            <ul>
+                <li th:each="page : ${pages}">
+                    <a th:href="@{${page.link}}" th:text="${page.name}" style="color: white;"></a>
+                </li>
+                <!-- <li><a href="/" style="color: white !important;">Home</a></li>
+                <li><a href="/calendar" style="color: white !important;">Calendar</a></li>
+                <li><a href="/timeline" style="color: white !important;">Timeline</a></li>
+                <li><a href="#contact" style="color: white !important;">Contact</a></li> -->
+            </ul>
+        </nav>
+
+        <!-- Notification icon -->
+        <div class="notification-icon" id="notifBell">
+            <a href="/notification" class="notif-link" style="font-size: 24px; color: white; text-decoration: none;">
+                <i class="fas fa-bell"></i>
+            </a>
+            <span class="notification-badge" id="notifCount">0</span>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <div th:replace="${body}"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const notifCount = document.getElementById("notifCount");
+    
+          const notifications = JSON.parse(localStorage.getItem("notifications")) || [
+            { message: "Reminder: Meeting at 3 PM", time: "10 min ago", new: false }
+          ];
+    
+          localStorage.setItem("notifications", JSON.stringify(notifications));
+    
+          const unreadCount = notifications.filter(n => n.new).length;
+
+          notifCount.textContent = unreadCount;
+          notifCount.style.display = unreadCount > 0 ? "inline-block" : "none";
+        });
+    </script>
+</body>
+</html>
