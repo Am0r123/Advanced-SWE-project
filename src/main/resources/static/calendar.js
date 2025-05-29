@@ -1,76 +1,97 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const monthYearDisplay = document.getElementById('month-year');
-  const prevMonthButton = document.getElementById('prev-month');
-  const nextMonthButton = document.getElementById('next-month');
-  const weekdaysContainer = document.querySelector('.calendar-weekdays');
-  const datesContainer = document.querySelector('.calendar-dates');
+ <script th:inline="javascript">// hya5od el value mn controller w y7otha fe java script
+    let backendEvents = /*[[${events}]]*/ []; //bta5od el events mn controller w y7otha fe el database 
+    console.log("Backend Events:", backendEvents);
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const calendarDates = document.getElementById("calendar-dates");
+    const monthYear = document.getElementById("month-year");
+    const weekdaysDiv = document.getElementById("weekdays");
+    const selectedDateTitle = document.getElementById("selected-date-title");
+    const eventList = document.getElementById("event-list");
+    const addEventBtn = document.getElementById("add-event");
 
-  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  let currentDate = new Date();
-  let notes = {};
+    let currentDate = new Date();
+    let selectedDate = null;
 
-  function renderWeekdays() {
-      weekdaysContainer.innerHTML = '';
-      weekdays.forEach(day => {
-          const dayElement = document.createElement('div');
-          dayElement.textContent = day;
-          weekdaysContainer.appendChild(dayElement);
-      });
-  }
+    weekdaysDiv.innerHTML = weekdays.map(day => `<div>${day}</div>`).join("");
 
-  function renderCalendar() {
-      datesContainer.innerHTML = '';
-      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      const startDay = firstDayOfMonth.getDay();
-      const totalDays = lastDayOfMonth.getDate();
+    let eventsMap = {};
 
-      monthYearDisplay.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${currentDate.getFullYear()}`;
+    backendEvents.forEach(ev => {
+      let evDate = ev.eventDate;
+      if (!eventsMap[evDate]) {
+        eventsMap[evDate] = [];
+      }
+      eventsMap[evDate].push(ev.title);
+    });
 
-      for (let i = 0; i < startDay; i++) {
-          const emptyCell = document.createElement('div');
-          datesContainer.appendChild(emptyCell);
+    function renderCalendar() {
+      calendarDates.innerHTML = "";
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      monthYear.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        calendarDates.innerHTML += `<div class="empty"></div>`;
       }
 
       for (let day = 1; day <= totalDays; day++) {
-          const dateCell = document.createElement('div');
-          dateCell.textContent = day;
-          dateCell.classList.add('date-cell');
+        const dateDiv = document.createElement("div");
+        dateDiv.textContent = day;
 
-          const noteInput = document.createElement('textarea');
-          noteInput.classList.add('note-input');
-          noteInput.placeholder = "Note...";
-          noteInput.value = notes[`${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`] || "";
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-          noteInput.addEventListener('input', function() {
-              notes[`${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`] = noteInput.value;
-          });
+        if (eventsMap[dateStr]) {
+          dateDiv.classList.add("has-note");
+        }
 
-          dateCell.appendChild(noteInput);
+        dateDiv.addEventListener("click", () => {
+          selectedDate = dateStr;
+          selectDate(dateDiv, dateStr);
+        });
 
-          const today = new Date();
-          if (
-              day === today.getDate() &&
-              currentDate.getMonth() === today.getMonth() &&
-              currentDate.getFullYear() === today.getFullYear()
-          ) {
-              dateCell.classList.add('current-date');
-          }
-
-          datesContainer.appendChild(dateCell);
+        calendarDates.appendChild(dateDiv);
       }
-  }
+    }
 
-  prevMonthButton.addEventListener('click', function() {
+    function loadEvents(dateStr) {
+      eventList.innerHTML = "";
+      const events = eventsMap[dateStr] || [];
+
+      if (events.length === 0) {
+        eventList.innerHTML = "<li>No events for this date.</li>";
+      } else {
+        events.forEach(event => {
+          const li = document.createElement("li");
+          li.textContent = `${event}`;
+          eventList.appendChild(li);
+        });
+      }
+    }
+
+    function selectDate(div, dateStr) {
+      document.querySelectorAll(".dates div").forEach(d => d.classList.remove("selected"));
+      div.classList.add("selected");
+
+      const [year, month, day] = dateStr.split("-");
+      selectedDateTitle.textContent = `Events for ${day}/${month}/${year}`;
+      loadEvents(dateStr);
+
+      addEventBtn.onclick = () => {
+        window.location.href = `/issues/create?selectedDate=${dateStr}&type=event`;
+      };
+    }
+
+    document.getElementById("prev-month").addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       renderCalendar();
-  });
+    });
 
-  nextMonthButton.addEventListener('click', function() {
+    document.getElementById("next-month").addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
       renderCalendar();
-  });
+    });
 
-  renderWeekdays();
-  renderCalendar();
-});
+    renderCalendar();
