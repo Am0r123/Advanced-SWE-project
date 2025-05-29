@@ -2,20 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dynamic Calendar</title>
+  <title>Calendar with Notes</title>
   <link rel="stylesheet" href="/css/calendar.css">
   <script defer src="calendar.js"></script>
 </head>
 <body>
-  <div class="calendar">
-    <div class="calendar-header">
-      <button id="prev-month">‹</button>
-      <div id="month-year"></div>
-      <button id="next-month">›</button>
+  <div class="body">
+    <div class="calendar-container">
+      <div class="header">
+        <button id="prev-month">‹</button>
+        <h2 id="month-year"></h2>
+        <button id="next-month">›</button>
+      </div>
+      <div class="weekdays" id="weekdays"></div>
+      <div class="dates" id="calendar-dates"></div>
     </div>
-    <div class="calendar-body">
-      <div class="calendar-weekdays"></div>
-      <div class="calendar-dates"></div>
+
+    <div class="note-container">
+      <h3 id="selected-date-title">Select a date</h3>
+      <ul id="event-list" style="text-align: left; margin-bottom: 15px;"></ul>
+      <div>
+        <button id="add-event">Add Event</button>
+      </div>
     </div>
   </div>
 </body>
