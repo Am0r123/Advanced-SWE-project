@@ -1,0 +1,331 @@
+
+    
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- <script src="<?php echo BASE_URL; ?>/assets/js/admin.js" defer></script> -->
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    form {
+        display: grid;
+    }
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fff;
+      color: #333;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='14' height='10' viewBox='0 0 14 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23666' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px 10px;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+  </style>
+</head>
+<body>
+    <div id="notification" class="notification"></div>
+    
+    <div class="admin-container">
+      <nav class="side-nav">
+        <div class="logo">Admin</div>
+        <ul>
+          <li><a href="#" onclick="showSection('user')">Manage Users</a></li>
+          <li><a href="#" onclick="showSection('admin')">Manage Admins</a></li>
+          <li><a href="#" onclick="showSection('task')">Manage Tasks</a></li>
+          <li><a href="#" onclick="showSection('event')">Manage Events</a></li>
+          <li><a href="#" onclick="showSection('notification1')">Manage Notifications</a></li>
+        </ul>
+      </nav>
+    
+      <main class="content">
+        <section class="insights">
+          <h1>Dashboard Insights</h1>
+          <div class="insights-grid">
+            <div class="card">
+              <h2>Total Users</h2>
+              <p th:text="${totalUsers}"></p>
+            </div>
+            <div class="card">
+              <h2>Active Memberships</h2>
+              <p th:text="${activeMemberships}"></p>
+            </div>
+            <div class="card">
+              <h2>Monthly Revenue</h2>
+              <p th:text="${monthlyRevenue}"></p>
+            </div>
+            <div class="card">
+              <h2>Products Sold</h2>
+              <p th:text="${productsSold}"></p>
+            </div>
+          </div>
+        </section>
+    
+        <section id="user" class="dynamic-section hidden">
+          <h2 id="userlisttitle">User List</h2>
+            <button  class="back-btn hidden addusertitle" onclick="goback('add_user','userTable')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="hidden addusertitle">Add User</h2>
+          <button class="reveal_btn" onclick="reveal('add_user','userTable')">Add User</button>
+          <form id="add_user" class="hidden" th:action="@{/admin/add-user}" method="post">
+            <input type="text" name="name" placeholder="User Name" />
+            <input type="text" name="username" placeholder="User Name" />
+            <input type="password" name="password" placeholder="Password" />
+            <button type="submit" class="btn-primary">Add User</button>
+          </form>
+    
+          <table id="userTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td>
+                        <a th:href="@{/admin/edit-user/{id}(id=${user.id})}" class="btn-edit">Edit</a>
+              
+                        <form th:action="@{/admin/delete-user}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${user.id}" />
+                            <button type="submit" class="btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>                               
+            </tbody>
+          </table>
+        </section>
+    
+        <section id="admin" class="dynamic-section hidden">
+          <h2 id="adminlisttitle">Admin List</h2>
+          <button  class="back-btn hidden addadmintitle" onclick="goback('add_admin','adminTable')">
+              <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="hidden addadmintitle">Add Admin</h2>
+          <button class="reveal_btn" onclick="reveal('add_admin','adminTable')">Add Admin</button>
+          <form id="add_admin" class="hidden" th:action="@{/admin/add-admin}" method="post">
+            <input type="text" name="name" placeholder="Admin Name" />
+            <input type="text" name="username" placeholder="Admin UserName" />
+            <input type="password" name="password" placeholder="Password" />
+            <button type="submit" class="btn-primary">Add Admin</button>
+          </form>
+    
+          <table id="adminTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>UserName</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="admin : ${admins}">
+                <td th:text="${admin.name}"></td>
+                <td th:text="${admin.username}"></td>
+                <td>
+                <a th:href="@{/admin/edit-admin/{id}(id=${admin.id})}" class="btn-edit">Edit</a>
+                  <form th:action="@{/admin/delete-admin}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${admin.id}" />
+                    <button type="submit" class="btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+
+        
+        <section id="task" class="dynamic-section hidden">
+          <h2 id="tasklisttitle">Task List</h2>
+        
+          <button class="back-btn hidden addtasktitle" onclick="goback('add_task','taskTable')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        
+          <h2 class="hidden addtasktitle">Add Task</h2>
+        
+          <button class="reveal_btn" onclick="reveal('add_task','taskTable')">Add Task</button>
+        
+          <form id="add_task" class="hidden" th:action="@{/admin/add-task}" method="post">
+            <input type="text" name="title" placeholder="Task Title" required />
+            <input type="text" rows="4" name="description" placeholder="Task Description" required />
+            <input type="date" name="startDate" placeholder="Start Date" required />
+            <input type="date" name="endDate" placeholder="End Date" required />
+            
+            <select name="status" required>
+              <option value="">Select Status</option>
+              <option value="To Do">TO DO</option>
+              <option value="In Progress">IN PROGRESS</option>
+              <option value="Done">DONE</option>
+            </select>
+            
+            <button type="submit" class="btn-primary">Add Task</button>
+          </form>
+        
+          <table id="taskTable">
+            <thead>
+              <tr>
+                <th>Task Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="task : ${tasks}">
+                <td th:text="${task.title}">Task Name</td>
+                <td th:text="${task.description}">Task Description</td>
+                <td th:text="${task.startDate}">2025-05-01</td>
+                <td th:text="${task.endDate}">2025-05-10</td>
+                <td>
+                  <span th:text="${task.status}" 
+                        th:classappend="'badge ' + 
+                                        (${task.status} == 'DONE' ? 'badge-success' : 
+                                        (${task.status} == 'IN_PROGRESS' ? 'badge-warning' : 'badge-secondary'))">
+                  </span>
+                </td>
+                <td>
+                  <a th:href="@{/admin/edit-task/{id}(id=${task.id})}" class="btn-edit">Edit</a>
+                  <form th:action="@{/admin/delete-task}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${task.id}" />
+                    <button type="submit" class="btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        
+        
+        <section id="event" class="dynamic-section hidden">
+          <h2 id="eventlisttitle">event List</h2>
+        
+          <button class="back-btn hidden addeventtitle" onclick="goback('add_event','eventTable')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        
+          <h2 class="hidden addeventtitle">Add event</h2>
+        
+          <button class="reveal_btn" onclick="reveal('add_event','eventTable')">Add event</button>
+        
+          <form id="add_event" class="hidden" th:action="@{/admin/add-event}" method="post">
+            <input type="text" name="title" placeholder="event Title" required />
+            <input type="text" rows="4" name="description" placeholder="event Description" required />
+            <input type="date" name="eventDate" placeholder="Due Date" required />
+            
+            <button type="submit" class="btn-primary">Add event</button>
+          </form>
+        
+          <table id="eventTable">
+            <thead>
+              <tr>
+                <th>event Title</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="event : ${events}">
+                <td th:text="${event.title}">event Name</td>
+                <td th:text="${event.description}">event Description</td>
+                <td th:text="${event.eventDate}">2025-05-01</td>
+                <td>
+                  <a th:href="@{/admin/edit-event/{id}(id=${event.id})}" class="btn-edit">Edit</a>
+                  <form th:action="@{/admin/delete-event}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${event.id}" />
+                    <button type="submit" class="btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+
+        
+        <section id="notification1" class="dynamic-section hidden">
+          <h2 id="notificationlisttitle">Notification List</h2>
+        
+          <button class="back-btn hidden addnotificationtitle" onclick="goback('add_notification','notificationTable')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        
+          <h2 class="hidden addnotificationtitle">Add notification</h2>
+        
+          <button class="reveal_btn" onclick="reveal('add_notification','notificationTable')">Add notification</button>
+        
+          <form id="add_notification" class="hidden" th:action="@{/admin/add-notification}" method="post">
+            <select name="userId" required>
+              <option value="">Select User</option>
+              <option th:each="user : ${users}"
+                      th:value="${user.id}"
+                      th:text="${user.name}">
+              </option>
+            </select>
+          
+            <textarea name="message" rows="3" placeholder="Notification Message" required></textarea>
+            <input type="date" name="date" required />
+          
+            <label>
+              <input type="checkbox" name="read" /> Mark as Read
+            </label>
+          
+            <button type="submit" class="btn-primary">Add Notification</button>
+          </form>
+          
+        
+          <table id="notificationTable">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="notification : ${notifications}">
+                <td th:text="${notification.userId}">Notification userId</td>
+                <td th:text="${notification.message}">Notification Message</td>
+                <td th:text="${notification.date}">2025-05-01</td>
+                <td>
+                  <a th:href="@{/admin/edit-notification/{id}(id=${notification.id})}" class="btn-edit">Edit</a>
+                  <form th:action="@{/admin/delete-notification}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${notification.id}" />
+                    <button type="submit" class="btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+      </main>
+    </div>    
+<script src="/js/admin.js"></script>
+</body>
+</html>
